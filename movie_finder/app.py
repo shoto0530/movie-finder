@@ -146,7 +146,7 @@ def get_pref_data(pref_code):
             area_codes.append(m.group(2))
 
     # 各エリアページを並列取得（市区町村名 + 映画館ID）
-    with ThreadPoolExecutor(max_workers=8) as ex:
+    with ThreadPoolExecutor(max_workers=3) as ex:
         area_results = list(ex.map(lambda c: fetch_area_info(pref_code, c), area_codes))
 
     # 市区町村名をまとめ、映画館リストを収集
@@ -160,7 +160,7 @@ def get_pref_data(pref_code):
 
     # 各映画館ページから全上映映画と市区町村名を並列取得
     movie_map = {}
-    with ThreadPoolExecutor(max_workers=8) as ex:
+    with ThreadPoolExecutor(max_workers=3) as ex:
         cinema_results = list(ex.map(
             lambda ac: fetch_cinema_movies(pref_code, ac[0], ac[1]),
             cinema_list
